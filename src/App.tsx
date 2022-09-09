@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import api from "./api";
 import {Note} from "./type";
 import NoteCard from './components/NoteCard';
@@ -72,6 +72,10 @@ function App() {
     SetDraft(null);
   }
 
+  useEffect(() =>{
+    api.notes.set(notes)
+   },[notes] )
+
   return (
     <main style={{padding: 24}}>
       <div style={{marginBottom: 24}}>
@@ -82,14 +86,16 @@ function App() {
         </div>
       </div>
       <div style={{display: 'grid', gap:24, gridTemplateColumns: 'repeat(auto-fill, minmax(480px, 1fr)'}}>
-        {matches.map((note) => (
+        {matches.length ? matches.map((note) => (
           <NoteCard 
             key={note.id} 
             note={note} 
             onDelete={handleDelete} 
             onArchive={handleArchive} 
-            onEdit={handleEdit}/>
-        ))}
+            onEdit={handleEdit}
+            />
+        )): (<p>Nothing here</p>)
+        }
       </div>
       
       {draft && 
